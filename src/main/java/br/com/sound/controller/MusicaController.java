@@ -1,21 +1,15 @@
 package br.com.sound.controller;
 
-import br.com.sound.dto.ArtistaDto;
 import br.com.sound.dto.MusicaDto;
-import br.com.sound.model.ArtistaModel;
-import br.com.sound.repository.ArtistaRepository;
-import br.com.sound.service.ArtistaService;
 import br.com.sound.service.MusicaService;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
-import java.util.UUID;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Log4j2
 @RestController
@@ -26,7 +20,7 @@ public class MusicaController {
     MusicaService musicaService;
 
     @PostMapping("/cadastro")
-    public ResponseEntity<Object> cadastrar(Long artistaId, @RequestBody @Valid MusicaDto musicaDto){
-           return musicaService.cadastrarMusica(artistaId, musicaDto);
+    public ResponseEntity<Object> cadastrar(Long artistaId, @RequestBody @Valid MusicaDto musicaDto) {
+        return musicaService.cadastrarMusica(artistaId, musicaDto);
     }
 }
