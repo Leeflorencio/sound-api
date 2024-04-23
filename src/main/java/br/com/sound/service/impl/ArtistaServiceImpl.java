@@ -44,6 +44,5 @@ public class ArtistaServiceImpl implements ArtistaService {
     public Object findById(Long artistaID) {
         return artistaRepository.findById(artistaID);
     }
-
-
+    
 }

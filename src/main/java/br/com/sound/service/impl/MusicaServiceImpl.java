@@ -26,14 +26,16 @@ public class MusicaServiceImpl implements MusicaService {
     @Override
     public ResponseEntity<Object> cadastrarMusica(Long artistaId, MusicaDto musicaDto) {
         try {
+            var musicaModel = new MusicaModel();
             Optional<ArtistaModel> artista = artistaRepository.findById(artistaId);
 
             if (!artista.isPresent()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Artista não encontrado");
+            } else if (musicaRepository.existsByArtistaIdAndTitulo(artistaId, musicaDto.getTitulo())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Música já cadastrada");
             } else {
                 ArtistaModel musico = artista.get();
 
-                var musicaModel = new MusicaModel();
                 musicaModel.setArtista(musico);
                 BeanUtils.copyProperties(musicaDto, musicaModel);
                 musicaRepository.save(musicaModel);
@@ -44,7 +46,7 @@ public class MusicaServiceImpl implements MusicaService {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro no cadastro." + e);
         }
-
     }
+
 }
 
