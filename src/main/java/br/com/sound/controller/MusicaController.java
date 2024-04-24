@@ -5,11 +5,10 @@ import br.com.sound.service.MusicaService;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Log4j2
 @RestController
@@ -23,4 +22,11 @@ public class MusicaController {
     public ResponseEntity<Object> cadastrar(Long artistaId, @RequestBody @Valid MusicaDto musicaDto) {
         return musicaService.cadastrarMusica(artistaId, musicaDto);
     }
+
+    @GetMapping("/listar")
+    public ResponseEntity<?> listar(@RequestParam Integer paginas, Integer registros){
+        Pageable pageable = PageRequest.of(paginas - 1, registros);
+        return musicaService.listarMusicas(pageable);
+    }
+
 }

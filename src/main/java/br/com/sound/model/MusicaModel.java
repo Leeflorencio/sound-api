@@ -1,6 +1,7 @@
 package br.com.sound.model;
 
 import br.com.sound.dto.ArtistaDto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -30,6 +31,7 @@ public class MusicaModel {
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonBackReference //mapeamento e eliminação do loop infinito no método listar
     @JoinColumn(name="artista_id", updatable=true)
     private ArtistaModel artista;
 }

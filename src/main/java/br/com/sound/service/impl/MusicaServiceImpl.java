@@ -8,6 +8,8 @@ import br.com.sound.repository.MusicaRepository;
 import br.com.sound.service.MusicaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,20 @@ public class MusicaServiceImpl implements MusicaService {
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro no cadastro." + e);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> listarMusicas(Pageable pageable) {
+        try {
+            Page<MusicaModel> musicas = musicaRepository.findAll(pageable);
+            if (musicas.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não há registros de musicas cadastradas");
+            } else {
+                return ResponseEntity.status(HttpStatus.CREATED).body(musicas);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar a lista " + e);
         }
     }
 

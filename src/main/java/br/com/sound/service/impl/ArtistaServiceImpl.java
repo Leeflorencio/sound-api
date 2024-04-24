@@ -7,11 +7,12 @@ import br.com.sound.service.ArtistaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
+import java.util.Optional;
 
 @Service
 public class ArtistaServiceImpl implements ArtistaService {
@@ -44,5 +45,34 @@ public class ArtistaServiceImpl implements ArtistaService {
     public Object findById(Long artistaID) {
         return artistaRepository.findById(artistaID);
     }
-    
+
+    @Override
+    public ResponseEntity<?> listarArtistas(Pageable pageable) {
+
+        try {
+            Page<ArtistaModel> artistas = artistaRepository.findAll(pageable);
+            if (artistas.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não há registros de artistas cadastrados");
+            } else {
+                return ResponseEntity.status(HttpStatus.CREATED).body(artistas);
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar a lista " + e);
+        }
+    }
+
+    @Override
+    public ResponseEntity<Object> buscarArtistaPorId(Long id) {
+        try{
+          Optional<ArtistaModel> artista = artistaRepository.findById(id);
+          if (!artista.isPresent()){
+              return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não há artista com o id " + id);
+          } else {
+              return ResponseEntity.status(HttpStatus.CREATED).body(artista);
+          }
+
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao localizar o artista: " + e);
+        }
+    }
 }

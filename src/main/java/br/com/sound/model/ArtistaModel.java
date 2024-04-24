@@ -1,6 +1,7 @@
 package br.com.sound.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,5 +27,6 @@ public class ArtistaModel {
     private String genero;
 
     @OneToMany(mappedBy = "artista")
+    @JsonManagedReference //mapeamento e eliminação do loop infinito no método listar
     private List<MusicaModel> musicas;
 }
