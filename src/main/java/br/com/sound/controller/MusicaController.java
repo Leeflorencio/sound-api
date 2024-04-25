@@ -29,4 +29,9 @@ public class MusicaController {
         return musicaService.listarMusicas(pageable);
     }
 
+    @DeleteMapping("/deletarTodasMusicas")
+    public ResponseEntity<Object> deletar(@RequestParam Long id){
+        return musicaService.deletarMusicas(id);
+    }
+
 }

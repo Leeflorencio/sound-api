@@ -5,9 +5,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -26,6 +27,7 @@ public class ArtistaModel {
     @Column(nullable = false, length = 50)
     private String genero;
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "artista")
     @JsonManagedReference //mapeamento e eliminação do loop infinito no método listar
     private List<MusicaModel> musicas;

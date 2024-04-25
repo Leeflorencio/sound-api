@@ -64,5 +64,21 @@ public class MusicaServiceImpl implements MusicaService {
         }
     }
 
+    @Override
+    public ResponseEntity<Object> deletarMusicas(Long id) {
+        try {
+            Optional<ArtistaModel> artista = artistaRepository.findById(id);
+            if (!artista.isPresent()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não há artista com o id " + id + ". Informe um id válido." );
+            } else{
+                ArtistaModel artistaModel = artista.get();
+                artistaRepository.delete(artistaModel);
+                return ResponseEntity.status(HttpStatus.OK).body("Toda as musicas do artista " + artista + "foram deletadas com sucesso.");
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao deletar as musicas " + e);
+        }
+    }
+
 }
 

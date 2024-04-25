@@ -1,6 +1,5 @@
 package br.com.sound.service;
 
-import br.com.sound.dto.ArtistaDto;
 import br.com.sound.dto.MusicaDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -11,4 +10,6 @@ public interface MusicaService {
     ResponseEntity<Object> cadastrarMusica(Long artistaId, MusicaDto musicaDto);
 
     ResponseEntity<?> listarMusicas(Pageable pageable);
+
+    ResponseEntity<Object> deletarMusicas(Long id);
 }
