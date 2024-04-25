@@ -16,4 +16,6 @@ public interface ArtistaService {
     ResponseEntity<Object> buscarArtistaPorId(Long id);
 
     ResponseEntity<Object> deletarArtista(Long id);
+
+    ResponseEntity<Object> buscarArtistaPorNome(String titulo);
 }

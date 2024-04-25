@@ -106,4 +106,19 @@ public class ArtistaServiceImpl implements ArtistaService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao deletar o artista: " + e);
         }
     }
+
+    @Override
+    public ResponseEntity<Object> buscarArtistaPorNome(String nome) {
+        try{
+            List<ArtistaModel> artistaPorNome = artistaRepository.findAllByNome(nome);
+
+            if (artistaPorNome.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontramos nenhum artista com o nome " + nome + ". Informe um nome válido." );
+            } else {
+                return ResponseEntity.status(HttpStatus.OK).body(artistaPorNome);
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + e);
+        }
+    }
 }

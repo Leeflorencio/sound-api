@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,7 +47,7 @@ public class MusicaServiceImpl implements MusicaService {
             }
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro no cadastro." + e);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro no cadastro: " + e);
         }
     }
 
@@ -60,25 +61,54 @@ public class MusicaServiceImpl implements MusicaService {
                 return ResponseEntity.status(HttpStatus.CREATED).body(musicas);
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar a lista " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar a lista: " + e);
         }
     }
 
     @Override
     public ResponseEntity<Object> deletarMusicas(Long id) {
         try {
-            Optional<ArtistaModel> artista = artistaRepository.findById(id);
-            if (!artista.isPresent()){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não há artista com o id " + id + ". Informe um id válido." );
+            Optional<MusicaModel> musica = musicaRepository.findById(id);
+            if (!musica.isPresent()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não há música com o id " + id + ". Informe um id válido." );
             } else{
-                ArtistaModel artistaModel = artista.get();
-                artistaRepository.delete(artistaModel);
-                return ResponseEntity.status(HttpStatus.OK).body("Toda as musicas do artista " + artista + "foram deletadas com sucesso.");
+                MusicaModel musicaModel = musica.get();
+                musicaRepository.delete(musicaModel);
+                return ResponseEntity.status(HttpStatus.OK).body("Musica " + musica.get().getTitulo() + " foi deletada com sucesso");
             }
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao deletar as musicas " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao deletar as musicas: " + e);
         }
     }
 
+    @Override
+    public ResponseEntity<Object> buscarMusicaPorId(Long id) {
+        try {
+            Optional<MusicaModel> musica = musicaRepository.findById(id);
+
+            if (!musica.isPresent()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não há música com o id " + id + ". Informe um id válido." );
+            } else {
+               return ResponseEntity.status(HttpStatus.OK).body(musica);
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + e);
+        }
+    }
+
+    @Override
+    public ResponseEntity<Object> buscarMusicaPorNome(String titulo) {
+        try{
+            List<MusicaModel> musicaPorNome = musicaRepository.findAllByTitulo(titulo);
+
+            if (musicaPorNome.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontramos a música com o nome " + titulo + ". Informe um nome válido." );
+            } else {
+                return ResponseEntity.status(HttpStatus.OK).body(musicaPorNome);
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + e);
+        }
+    }
 }
 

@@ -12,4 +12,8 @@ public interface MusicaService {
     ResponseEntity<?> listarMusicas(Pageable pageable);
 
     ResponseEntity<Object> deletarMusicas(Long id);
+
+    ResponseEntity<Object> buscarMusicaPorId(Long id);
+
+    ResponseEntity<Object> buscarMusicaPorNome(String nome);
 }
