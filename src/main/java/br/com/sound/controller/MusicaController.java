@@ -51,4 +51,13 @@ public class MusicaController {
         return musicaService.atualizarMusica(musicaDto, idMusica, idArtista);
     }
 
+    public String index() {
+        log.trace("TRACE"); //log mais detalhado
+        log.debug("DEBUG"); //detalhamento dos métodos, utilizado para desenvolvimento
+        log.info("INFO"); //menos detalhado que o debug, mais utilizado em produção
+        log.warn("WARN"); //log de alerta
+        log.error("ERROR"); //log de erro
+        return "Logging Spring Boot...";
+    }
+
 }

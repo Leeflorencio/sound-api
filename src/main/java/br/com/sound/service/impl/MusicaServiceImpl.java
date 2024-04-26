@@ -6,6 +6,7 @@ import br.com.sound.model.MusicaModel;
 import br.com.sound.repository.ArtistaRepository;
 import br.com.sound.repository.MusicaRepository;
 import br.com.sound.service.MusicaService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+@Log4j2
 @Service
 public class MusicaServiceImpl implements MusicaService {
 
@@ -28,6 +30,8 @@ public class MusicaServiceImpl implements MusicaService {
 
     @Override
     public ResponseEntity<Object> cadastrarMusica(Long artistaId, MusicaDto musicaDto) {
+        log.debug("Recebendo os dados da musica: ", musicaDto);
+
         try {
             var musicaModel = new MusicaModel();
             Optional<ArtistaModel> artista = artistaRepository.findById(artistaId);
@@ -43,6 +47,7 @@ public class MusicaServiceImpl implements MusicaService {
                 BeanUtils.copyProperties(musicaDto, musicaModel);
                 musicaRepository.save(musicaModel);
 
+                log.info("Musica cadastrada: ");
                 return ResponseEntity.status(HttpStatus.CREATED).body("Musica cadastrado com sucesso.");
             }
 
@@ -74,6 +79,8 @@ public class MusicaServiceImpl implements MusicaService {
             } else{
                 MusicaModel musicaModel = musica.get();
                 musicaRepository.delete(musicaModel);
+                log.debug("Recebendo o id da musica: ", id);
+                log.info("Musica excluida");
                 return ResponseEntity.status(HttpStatus.OK).body("Musica " + musica.get().getTitulo() + " foi deletada com sucesso");
             }
         }catch (Exception e){
@@ -100,10 +107,10 @@ public class MusicaServiceImpl implements MusicaService {
     public ResponseEntity<Object> buscarMusicaPorNome(String titulo) {
         try{
             List<MusicaModel> musicaPorNome = musicaRepository.findAllByTitulo(titulo);
-
             if (musicaPorNome.isEmpty()){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontramos a música com o nome " + titulo + ". Informe um nome válido." );
             } else {
+                log.info("Musicas encontradas" );
                 return ResponseEntity.status(HttpStatus.OK).body(musicaPorNome);
             }
         }catch (Exception e){
@@ -113,8 +120,9 @@ public class MusicaServiceImpl implements MusicaService {
 
     @Override
     public ResponseEntity<Object> atualizarMusica(MusicaDto musicaDto, Long idMusica, Long idArtista) {
+        log.info("id musica: " + idMusica);
+        log.info("id artista: " + idArtista);
         try{
-
             Optional<MusicaModel> musicaModel = musicaRepository.findById(idMusica);
             Optional<ArtistaModel> artistaModel = artistaRepository.findById(idArtista);
             if (!musicaModel.isPresent()){

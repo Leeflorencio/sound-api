@@ -6,6 +6,7 @@ import br.com.sound.model.MusicaModel;
 import br.com.sound.repository.ArtistaRepository;
 import br.com.sound.repository.MusicaRepository;
 import br.com.sound.service.ArtistaService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+@Log4j2
 @Service
 public class ArtistaServiceImpl implements ArtistaService {
 
@@ -29,6 +31,7 @@ public class ArtistaServiceImpl implements ArtistaService {
 
     @Override
     public ResponseEntity<Object> cadastrarArtista(ArtistaDto artistaDto) {
+        log.info("Dados recebidos do artista: " + artistaDto);
 
         try {
             var artistaModel = new ArtistaModel();
@@ -39,6 +42,7 @@ public class ArtistaServiceImpl implements ArtistaService {
                 BeanUtils.copyProperties(artistaDto, artistaModel);
                 artistaRepository.save(artistaModel);
 
+                log.info("Dados cadastrados: " + artistaModel);
                 return ResponseEntity.status(HttpStatus.CREATED).body("Artista cadastrado com sucesso.");
             }
 
@@ -87,15 +91,16 @@ public class ArtistaServiceImpl implements ArtistaService {
     @Override
     public ResponseEntity<Object> deletarArtista(Long id) {
         //delecao em cascata
+        log.info("Id artista: " + id);
         try {
             List<MusicaModel> musicasArtista = musicaRepository.findAllMusicasIntoArtistas(id);
             if (!musicasArtista.isEmpty()) {
                 musicaRepository.deleteAll(musicasArtista);
             }
-
             Optional<ArtistaModel> artista = artistaRepository.findById(id);
 
             if (!artista.isPresent()) {
+                log.info("Artista nao localizado");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não há artista com o id " + id + ". Informe um id válido.");
             } else {
                 ArtistaModel artistaModel = artista.get();
@@ -124,6 +129,7 @@ public class ArtistaServiceImpl implements ArtistaService {
 
     @Override
     public ResponseEntity<Object> atualizarArtista(ArtistaDto artistaDto, Long id) {
+        log.info("Dados para atualizar: ", artistaDto.toString());
         try {
             Optional<ArtistaModel> artistaModel = artistaRepository.findById(id);
             if (!artistaModel.isPresent()) {
@@ -135,6 +141,7 @@ public class ArtistaServiceImpl implements ArtistaService {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Informe um genero válido com letras entre A e Z");
                 } else {
                     artista.setGenero(artistaDto.getGenero());
+                    log.info("Dados atualizado: ", artista.toString());
                     artistaRepository.save(artista);
                     return ResponseEntity.status(HttpStatus.CREATED).body("Artista atualizado com sucesso");
                 }
