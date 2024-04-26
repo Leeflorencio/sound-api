@@ -1,5 +1,6 @@
 package br.com.sound.controller;
 
+import br.com.sound.dto.ArtistaDto;
 import br.com.sound.dto.MusicaDto;
 import br.com.sound.service.MusicaService;
 import jakarta.validation.Valid;
@@ -45,5 +46,9 @@ public class MusicaController {
     }
 
 
+    @PutMapping("/atualizar")
+    public ResponseEntity<Object> atualizar(@RequestBody MusicaDto musicaDto, Long idMusica, Long idArtista){
+        return musicaService.atualizarMusica(musicaDto, idMusica, idArtista);
+    }
 
 }

@@ -39,8 +39,14 @@ public class ArtistaController {
         return artistaService.buscarArtistaPorNome(nome);
     }
 
-    @DeleteMapping("/deletarArtista")
+    @DeleteMapping("/deletar")
     public ResponseEntity<Object> deletar(@RequestParam Long id){
         return artistaService.deletarArtista(id);
+    }
+
+
+    @PutMapping("/atualizar")
+    public ResponseEntity<Object> atualizar(@RequestBody ArtistaDto artistaDto, Long id){
+        return artistaService.atualizarArtista(artistaDto, id);
     }
 }

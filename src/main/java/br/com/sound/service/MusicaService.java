@@ -16,4 +16,6 @@ public interface MusicaService {
     ResponseEntity<Object> buscarMusicaPorId(Long id);
 
     ResponseEntity<Object> buscarMusicaPorNome(String nome);
+
+    ResponseEntity<Object> atualizarMusica(MusicaDto musicaDto, Long id, Long idArtista);
 }

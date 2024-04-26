@@ -109,16 +109,42 @@ public class ArtistaServiceImpl implements ArtistaService {
 
     @Override
     public ResponseEntity<Object> buscarArtistaPorNome(String nome) {
-        try{
+        try {
             List<ArtistaModel> artistaPorNome = artistaRepository.findAllByNome(nome);
 
-            if (artistaPorNome.isEmpty()){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontramos nenhum artista com o nome " + nome + ". Informe um nome válido." );
+            if (artistaPorNome.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontramos nenhum artista com o nome " + nome + ". Informe um nome válido.");
             } else {
                 return ResponseEntity.status(HttpStatus.OK).body(artistaPorNome);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + e);
         }
+    }
+
+    @Override
+    public ResponseEntity<Object> atualizarArtista(ArtistaDto artistaDto, Long id) {
+        try {
+            Optional<ArtistaModel> artistaModel = artistaRepository.findById(id);
+            if (!artistaModel.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontramos nenhum artista com o id " + id + ". Informe um id válido.");
+            } else {
+                var artista = artistaModel.get();
+                artista.setNome(artistaDto.getNome());
+                if (!generoValido(artistaDto.getGenero())) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Informe um genero válido com letras entre A e Z");
+                } else {
+                    artista.setGenero(artistaDto.getGenero());
+                    artistaRepository.save(artista);
+                    return ResponseEntity.status(HttpStatus.CREATED).body("Artista atualizado com sucesso");
+                }
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + e);
+        }
+    }
+
+    private boolean generoValido(String genero) {
+        return genero.matches("^[A-Za-z\\\\/\\s]+$");
     }
 }

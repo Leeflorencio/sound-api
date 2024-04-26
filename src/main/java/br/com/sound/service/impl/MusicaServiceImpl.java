@@ -110,5 +110,39 @@ public class MusicaServiceImpl implements MusicaService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + e);
         }
     }
+
+    @Override
+    public ResponseEntity<Object> atualizarMusica(MusicaDto musicaDto, Long idMusica, Long idArtista) {
+        try{
+
+            Optional<MusicaModel> musicaModel = musicaRepository.findById(idMusica);
+            Optional<ArtistaModel> artistaModel = artistaRepository.findById(idArtista);
+            if (!musicaModel.isPresent()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontramos a música com o id " + idMusica + ". Informe um id válido." );
+            } else if (!artistaModel.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontramos o artista com o id " + idArtista + ". Informe um id válido." );
+            } else {
+                var musica = musicaModel.get();
+                var cantor = artistaModel.get();
+
+                musica.setTitulo(musicaDto.getTitulo());
+                musica.setLetra(musicaDto.getLetra());
+                musica.setArtista(cantor);
+                if (!generoValido(musicaDto.getGenero())){
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Informe um genero válido com letras entre A e Z");
+                }else {
+                    musica.setGenero(musicaDto.getGenero());
+                    musicaRepository.save(musica);
+                    return ResponseEntity.status(HttpStatus.CREATED).body("Musica atualizado com sucesso");
+                }
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + e);
+        }
+    }
+
+    private boolean generoValido(String genero) {
+        return genero.matches("^[A-Za-z\\\\/\\s]+$");
+    }
 }
 
