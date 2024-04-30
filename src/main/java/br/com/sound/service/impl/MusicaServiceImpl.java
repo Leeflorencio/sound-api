@@ -1,8 +1,10 @@
 package br.com.sound.service.impl;
 
 import br.com.sound.dto.MusicaDto;
+import br.com.sound.model.AlbumModel;
 import br.com.sound.model.ArtistaModel;
 import br.com.sound.model.MusicaModel;
+import br.com.sound.repository.AlbumRepository;
 import br.com.sound.repository.ArtistaRepository;
 import br.com.sound.repository.MusicaRepository;
 import br.com.sound.service.MusicaService;
@@ -28,33 +30,42 @@ public class MusicaServiceImpl implements MusicaService {
     @Autowired
     ArtistaRepository artistaRepository;
 
+    @Autowired
+    AlbumRepository albumRepository;
+
     @Override
-    public ResponseEntity<Object> cadastrarMusica(Long artistaId, MusicaDto musicaDto) {
+    public ResponseEntity<Object> cadastrarMusica(Long artistaId, Long albumId, MusicaDto musicaDto) {
         log.debug("Recebendo os dados da musica: ", musicaDto);
 
         try {
             var musicaModel = new MusicaModel();
             Optional<ArtistaModel> artista = artistaRepository.findById(artistaId);
+            Optional<AlbumModel> album = albumRepository.findById(albumId);
 
             if (!artista.isPresent()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Artista não encontrado");
             } else if (musicaRepository.existsByArtistaIdAndTitulo(artistaId, musicaDto.getTitulo())) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Música já cadastrada");
+            } else if (!album.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Álbum não encontrado");
             } else {
                 ArtistaModel musico = artista.get();
+                AlbumModel albumModel = album.get();
 
+                musicaModel.setAlbum(albumModel);
                 musicaModel.setArtista(musico);
                 BeanUtils.copyProperties(musicaDto, musicaModel);
                 musicaRepository.save(musicaModel);
 
                 log.info("Musica cadastrada: ");
-                return ResponseEntity.status(HttpStatus.CREATED).body("Musica cadastrado com sucesso.");
+                return ResponseEntity.status(HttpStatus.CREATED).body("Musica cadastrada com sucesso.");
             }
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro no cadastro: " + e);
         }
     }
+
 
     @Override
     public ResponseEntity<?> listarMusicas(Pageable pageable) {

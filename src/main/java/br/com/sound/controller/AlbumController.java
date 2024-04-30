@@ -17,7 +17,7 @@ public class AlbumController {
     AlbumService albumService;
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Object> cadastrar(@RequestBody AlbumDto albumDto){
-        return albumService.cadastrarAlbum(albumDto);
+    public ResponseEntity<Object> cadastrar(Long idArtista, @RequestBody AlbumDto albumDto){
+        return albumService.cadastrarAlbum(idArtista, albumDto);
     }
 }

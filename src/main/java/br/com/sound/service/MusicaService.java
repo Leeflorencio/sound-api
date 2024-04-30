@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface MusicaService {
-    ResponseEntity<Object> cadastrarMusica(Long artistaId, MusicaDto musicaDto);
+    ResponseEntity<Object> cadastrarMusica(Long artistaId, Long albumId, MusicaDto musicaDto);
 
     ResponseEntity<?> listarMusicas(Pageable pageable);
 

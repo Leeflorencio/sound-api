@@ -8,4 +8,7 @@ import org.springframework.stereotype.Repository;
 public interface AlbumRepository extends JpaRepository<AlbumModel, Long> {
 
 
+    boolean findByTitulo(String titulo);
+
+    boolean existsByTitulo(String titulo);
 }

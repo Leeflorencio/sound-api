@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface AlbumService {
-    ResponseEntity<Object> cadastrarAlbum(AlbumDto albumDto);
+    ResponseEntity<Object> cadastrarAlbum(Long idArtista, AlbumDto albumDto);
 }

@@ -20,8 +20,8 @@ public class MusicaController {
     MusicaService musicaService;
 
     @PostMapping("/cadastro")
-    public ResponseEntity<Object> cadastrar(Long artistaId, @RequestBody @Valid MusicaDto musicaDto) {
-        return musicaService.cadastrarMusica(artistaId, musicaDto);
+    public ResponseEntity<Object> cadastrar(Long artistaId, Long albumId, @RequestBody @Valid MusicaDto musicaDto) {
+        return musicaService.cadastrarMusica(artistaId, albumId, musicaDto);
     }
 
     @GetMapping("/listar")
