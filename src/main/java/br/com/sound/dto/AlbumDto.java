@@ -15,7 +15,7 @@ public class AlbumDto {
     private String titulo;
     private LocalDate dataDeLancamento;
     private String genero;
-    //private String pontuacao;
-    //private Integer avalicacao;
+
+    private ArtistaDto artistaDto;
 
 }

@@ -3,14 +3,12 @@ package br.com.sound.controller;
 import br.com.sound.dto.ArtistaDto;
 import br.com.sound.service.ArtistaService;
 import jakarta.validation.Valid;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Log4j2
 @RestController
 @RequestMapping("/artistas")
 public class ArtistaController {

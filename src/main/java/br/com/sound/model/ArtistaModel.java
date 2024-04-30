@@ -31,4 +31,9 @@ public class ArtistaModel {
     @OneToMany(mappedBy = "artista")
     @JsonManagedReference //mapeamento e eliminação do loop infinito no método listar
     private List<MusicaModel> musicas;
+
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "artistaModel")
+    @JsonManagedReference //mapeamento e eliminação do loop infinito no método listar
+    private List<AlbumModel> album;
 }

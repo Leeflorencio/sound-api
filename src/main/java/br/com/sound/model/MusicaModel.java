@@ -28,10 +28,14 @@ public class MusicaModel {
     @Column(nullable = false, length = 50)
     private String genero;
 
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference //mapeamento e eliminação do loop infinito no método listar
     @JoinColumn(name = "artista_id", updatable = true)
     private ArtistaModel artista;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "album_id")
+    private AlbumModel album;
+
 }
