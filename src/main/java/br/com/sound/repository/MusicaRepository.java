@@ -20,4 +20,16 @@ public interface MusicaRepository extends JpaRepository<MusicaModel, Long> {
     @Query(value = "SELECT * FROM musicas WHERE titulo LIKE %:titulo%", nativeQuery = true)
     List<MusicaModel> findAllByTitulo(@Param("titulo") String titulo);
 
+    @Query(value = "SELECT * FROM musicas WHERE album_id = :id", nativeQuery = true)
+    List<MusicaModel> findAllMusicasIntoAlbum(@Param("id") Long id);
+
+    @Query(value = "SELECT CONCAT('Album: ', a.titulo) AS titulo_album, " +
+            "CONCAT(' Data lançamento: ', a.data_de_lancamento) AS data_de_lancamento_album, " +
+            "CONCAT(' Genero: ', a.genero) AS genero_album, " +
+            "CONCAT(' Musica: ', m.titulo) AS titulo_musica, " +
+            "CONCAT(' id artista: ', m.artista_id) AS id_artista " +
+            "FROM album AS a " +
+            "JOIN musicas AS m ON a.id = m.album_id " +
+            "WHERE a.id = :idAlbum", nativeQuery = true)
+    List<String> findAlbumAndMusicDetailsByAlbumId(@Param("idAlbum") Long idAlbum);
 }

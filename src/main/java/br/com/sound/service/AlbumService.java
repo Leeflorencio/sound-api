@@ -12,4 +12,6 @@ public interface AlbumService {
     ResponseEntity<?> listarAlbuns(Pageable pageable);
 
     ResponseEntity<Object> buscarAlbumPorId(Long id);
+
+    ResponseEntity<Object> deletarAlbum(Long id);
 }
