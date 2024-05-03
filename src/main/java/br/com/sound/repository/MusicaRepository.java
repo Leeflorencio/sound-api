@@ -4,6 +4,8 @@ import br.com.sound.model.MusicaModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,5 +21,8 @@ public interface MusicaRepository extends JpaRepository<MusicaModel, Long> {
 
     @Query(value = "SELECT * FROM musicas WHERE titulo LIKE %:titulo%", nativeQuery = true)
     List<MusicaModel> findAllByTitulo(@Param("titulo") String titulo);
+
+    @Query(value = "SELECT * FROM musicas WHERE album_id = :id", nativeQuery = true)
+    List<MusicaModel> findAllMusicasIntoAlbum(@Param("id") Long id);
 
 }

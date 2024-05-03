@@ -3,9 +3,12 @@ package br.com.sound.service.impl;
 import br.com.sound.dto.AlbumDto;
 import br.com.sound.model.AlbumModel;
 import br.com.sound.model.ArtistaModel;
+import br.com.sound.model.MusicaModel;
 import br.com.sound.repository.AlbumRepository;
 import br.com.sound.repository.ArtistaRepository;
+import br.com.sound.repository.MusicaRepository;
 import br.com.sound.service.AlbumService;
+import br.com.sound.service.MusicaService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Log4j2
@@ -26,6 +30,9 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Autowired
     ArtistaRepository artistaRepository;
+
+    @Autowired
+    MusicaRepository musicaRepository;
 
     @Override
     public ResponseEntity<Object> cadastrarAlbum(Long idArtista, AlbumDto albumDto) {
@@ -67,7 +74,7 @@ public class AlbumServiceImpl implements AlbumService {
             }
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro no cadastro: " + e);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro na busca: " + e);
         }
     }
 
@@ -83,7 +90,28 @@ public class AlbumServiceImpl implements AlbumService {
                 return ResponseEntity.status(HttpStatus.CREATED).body(album);
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro no cadastro: " + e);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro na busca: " + e);
+        }
+    }
+
+    @Override
+    public ResponseEntity<Object> deletarAlbum(Long id) {
+        try {
+            List<MusicaModel> listaDeMusicas = musicaRepository.findAllMusicasIntoAlbum(id);
+            if (!listaDeMusicas.isEmpty()) {
+                musicaRepository.deleteAll(listaDeMusicas);
+                log.info("deletando musicas do album ");
+            }
+            Optional<AlbumModel> albumModel = albumRepository.findById(id);
+            if (!albumModel.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não há álbum com o id " + id + ". Informe um id válido.");
+            } else {
+                AlbumModel album = albumModel.get();
+                albumRepository.delete(album);
+                return ResponseEntity.status(HttpStatus.OK).body("Album " + albumModel.get().getTitulo() + " deletado com sucesso. ");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro na exclusão: " + e);
         }
     }
 
