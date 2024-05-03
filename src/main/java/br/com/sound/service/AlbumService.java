@@ -10,4 +10,6 @@ public interface AlbumService {
     ResponseEntity<Object> cadastrarAlbum(Long idArtista, AlbumDto albumDto);
 
     ResponseEntity<?> listarAlbuns(Pageable pageable);
+
+    ResponseEntity<Object> buscarAlbumPorId(Long id);
 }

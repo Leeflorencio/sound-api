@@ -25,4 +25,9 @@ public class AlbumController {
         Pageable pageable = PageRequest.of(paginas - 1, registros);
         return albumService.listarAlbuns(pageable);
     }
+
+    @GetMapping("/buscarPorId")
+    public ResponseEntity<Object> buscarPorId(@RequestParam Long id){
+        return albumService.buscarAlbumPorId(id);
+    }
 }

@@ -71,6 +71,22 @@ public class AlbumServiceImpl implements AlbumService {
         }
     }
 
+    @Override
+    public ResponseEntity<Object> buscarAlbumPorId(Long id) {
+        try {
+            Optional<AlbumModel> albumModel = albumRepository.findById(id);
+
+            if (!albumModel.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não localizamos o álbum com o id: " + id);
+            } else {
+                AlbumModel album = albumModel.get();
+                return ResponseEntity.status(HttpStatus.CREATED).body(album);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro no cadastro: " + e);
+        }
+    }
+
 
     private boolean generoValido(String genero) {
         return genero.matches("^[A-Za-z\\\\/\\s]+$");
