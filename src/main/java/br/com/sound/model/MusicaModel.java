@@ -2,6 +2,8 @@ package br.com.sound.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,13 +31,16 @@ public class MusicaModel {
     private String genero;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference //mapeamento e eliminação do loop infinito no método listar
     @JoinColumn(name = "artista_id", updatable = true)
     private ArtistaModel artista;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(name = "album_id")
+    @JsonBackReference
     private AlbumModel album;
 
 }

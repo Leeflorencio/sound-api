@@ -46,12 +46,13 @@ public class MusicaServiceImpl implements MusicaService {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Artista não encontrado");
             } else if (musicaRepository.existsByArtistaIdAndTitulo(artistaId, musicaDto.getTitulo())) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Música já cadastrada");
+            } else if (!generoValido(musicaDto.getGenero())) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Informe um genero válido com letras entre A e Z");
             } else if (!album.isPresent()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Álbum não encontrado");
             } else {
                 ArtistaModel musico = artista.get();
                 AlbumModel albumModel = album.get();
-
                 musicaModel.setAlbum(albumModel);
                 musicaModel.setArtista(musico);
                 BeanUtils.copyProperties(musicaDto, musicaModel);
@@ -60,7 +61,6 @@ public class MusicaServiceImpl implements MusicaService {
                 log.info("Musica cadastrada: ");
                 return ResponseEntity.status(HttpStatus.CREATED).body("Musica cadastrada com sucesso.");
             }
-
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro no cadastro: " + e);
         }
@@ -85,16 +85,16 @@ public class MusicaServiceImpl implements MusicaService {
     public ResponseEntity<Object> deletarMusicas(Long id) {
         try {
             Optional<MusicaModel> musica = musicaRepository.findById(id);
-            if (!musica.isPresent()){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não há música com o id " + id + ". Informe um id válido." );
-            } else{
+            if (!musica.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não há música com o id " + id + ". Informe um id válido.");
+            } else {
                 MusicaModel musicaModel = musica.get();
                 musicaRepository.delete(musicaModel);
                 log.debug("Recebendo o id da musica: ", id);
                 log.info("Musica excluida");
                 return ResponseEntity.status(HttpStatus.OK).body("Musica " + musica.get().getTitulo() + " foi deletada com sucesso");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao deletar as musicas: " + e);
         }
     }
@@ -104,27 +104,27 @@ public class MusicaServiceImpl implements MusicaService {
         try {
             Optional<MusicaModel> musica = musicaRepository.findById(id);
 
-            if (!musica.isPresent()){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não há música com o id " + id + ". Informe um id válido." );
+            if (!musica.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não há música com o id " + id + ". Informe um id válido.");
             } else {
-               return ResponseEntity.status(HttpStatus.OK).body(musica);
+                return ResponseEntity.status(HttpStatus.OK).body(musica);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + e);
         }
     }
 
     @Override
     public ResponseEntity<Object> buscarMusicaPorNome(String titulo) {
-        try{
+        try {
             List<MusicaModel> musicaPorNome = musicaRepository.findAllByTitulo(titulo);
-            if (musicaPorNome.isEmpty()){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontramos a música com o nome " + titulo + ". Informe um nome válido." );
+            if (musicaPorNome.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontramos a música com o nome " + titulo + ". Informe um nome válido.");
             } else {
-                log.info("Musicas encontradas" );
+                log.info("Musicas encontradas");
                 return ResponseEntity.status(HttpStatus.OK).body(musicaPorNome);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + e);
         }
     }
@@ -133,13 +133,13 @@ public class MusicaServiceImpl implements MusicaService {
     public ResponseEntity<Object> atualizarMusica(MusicaDto musicaDto, Long idMusica, Long idArtista) {
         log.info("id musica: " + idMusica);
         log.info("id artista: " + idArtista);
-        try{
+        try {
             Optional<MusicaModel> musicaModel = musicaRepository.findById(idMusica);
             Optional<ArtistaModel> artistaModel = artistaRepository.findById(idArtista);
-            if (!musicaModel.isPresent()){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontramos a música com o id " + idMusica + ". Informe um id válido." );
+            if (!musicaModel.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontramos a música com o id " + idMusica + ". Informe um id válido.");
             } else if (!artistaModel.isPresent()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontramos o artista com o id " + idArtista + ". Informe um id válido." );
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontramos o artista com o id " + idArtista + ". Informe um id válido.");
             } else {
                 var musica = musicaModel.get();
                 var cantor = artistaModel.get();
@@ -147,15 +147,15 @@ public class MusicaServiceImpl implements MusicaService {
                 musica.setTitulo(musicaDto.getTitulo());
                 musica.setLetra(musicaDto.getLetra());
                 musica.setArtista(cantor);
-                if (!generoValido(musicaDto.getGenero())){
+                if (!generoValido(musicaDto.getGenero())) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Informe um genero válido com letras entre A e Z");
-                }else {
+                } else {
                     musica.setGenero(musicaDto.getGenero());
                     musicaRepository.save(musica);
                     return ResponseEntity.status(HttpStatus.CREATED).body("Musica atualizado com sucesso");
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + e);
         }
     }
