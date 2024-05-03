@@ -14,4 +14,5 @@ public interface AlbumService {
     ResponseEntity<Object> buscarAlbumPorId(Long id);
 
     ResponseEntity<Object> deletarAlbum(Long id);
+
 }

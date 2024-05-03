@@ -8,7 +8,6 @@ import br.com.sound.repository.AlbumRepository;
 import br.com.sound.repository.ArtistaRepository;
 import br.com.sound.repository.MusicaRepository;
 import br.com.sound.service.AlbumService;
-import br.com.sound.service.MusicaService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,8 +85,10 @@ public class AlbumServiceImpl implements AlbumService {
             if (!albumModel.isPresent()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não localizamos o álbum com o id: " + id);
             } else {
-                AlbumModel album = albumModel.get();
-                return ResponseEntity.status(HttpStatus.CREATED).body(album);
+                //lbumModel album = albumModel.get();
+                List<String> listaDeMusicas = musicaRepository.findAlbumAndMusicDetailsByAlbumId(id);
+
+                return ResponseEntity.status(HttpStatus.CREATED).body(listaDeMusicas);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro na busca: " + e);
@@ -115,8 +116,8 @@ public class AlbumServiceImpl implements AlbumService {
         }
     }
 
-
     private boolean generoValido(String genero) {
         return genero.matches("^[A-Za-z\\\\/\\s]+$");
     }
+
 }

@@ -31,8 +31,10 @@ public class AlbumController {
         return albumService.buscarAlbumPorId(id);
     }
 
+
     @DeleteMapping("/deletar")
     public ResponseEntity<Object> deletar(@RequestParam Long id){
         return albumService.deletarAlbum(id);
     }
+
 }
