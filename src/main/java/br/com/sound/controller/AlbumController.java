@@ -35,4 +35,9 @@ public class AlbumController {
     public ResponseEntity<Object> deletar(@RequestParam Long id){
         return albumService.deletarAlbum(id);
     }
+
+    @PutMapping("/atualizar")
+    public ResponseEntity<Object> atualizar(@RequestParam Long id, @RequestBody AlbumDto albumDto){
+        return albumService.atualizarAlbum(id, albumDto);
+    }
 }

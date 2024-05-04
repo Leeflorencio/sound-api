@@ -115,6 +115,28 @@ public class AlbumServiceImpl implements AlbumService {
         }
     }
 
+    @Override
+    public ResponseEntity<Object> atualizarAlbum(Long id, AlbumDto albumDto) {
+        try{
+            Optional<AlbumModel> albumOptional = albumRepository.findById(id);
+
+            if (!albumOptional.isPresent()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não há álbum com o id " + id + ". Informe um id válido.");
+            }else{
+                AlbumModel album = albumOptional.get();
+
+                album.setTitulo(albumDto.getTitulo());
+                album.setDataDeLancamento(albumDto.getDataDeLancamento());
+                album.setGenero(albumDto.getGenero());
+
+                albumRepository.save(album);
+                return ResponseEntity.status(HttpStatus.CREATED).body("Álbum atualizado com sucesso: " + album);
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro na atualização: " + e);
+        }
+    }
+
 
     private boolean generoValido(String genero) {
         return genero.matches("^[A-Za-z\\\\/\\s]+$");

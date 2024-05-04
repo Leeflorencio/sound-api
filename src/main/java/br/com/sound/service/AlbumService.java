@@ -14,4 +14,6 @@ public interface AlbumService {
     ResponseEntity<Object> buscarAlbumPorId(Long id);
 
     ResponseEntity<Object> deletarAlbum(Long id);
+
+    ResponseEntity<Object> atualizarAlbum(Long id, AlbumDto albumDto);
 }
