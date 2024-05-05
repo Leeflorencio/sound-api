@@ -5,7 +5,13 @@
 
 *EM CONSTRUÇÃO*
 
-### Features
+### Features (Artista/Música/Álbum)
+GET /artistas/listarTodos: Solicita a quantidade de registros através de paginação e, retorna todos os artistas cadastrados.
+GET /artistas/buscarPorId/{id}: Solicita o identificador do artista, retorna um registro específico da entidade pelo ID.
+GET /artistas/buscarPorNome: Solicita o nome do artista, retorna um registro específico da entidade pelo nome.
+POST /artistas/cadastro: Cria um novo artista no banco de dados.
+PUT /artistas/atualizar/{id}: Atualiza um registro existente de um artista pelo ID.
+DELETE /artistas/deletar/{id}: Exclui um registro existente de um artista pelo ID.
 
 ### 🛠 Tecnologias
 Java 17 - MySQL - Spring Data JPA - Hibernate - Spring Boot - API Docs 
