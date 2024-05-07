@@ -118,7 +118,7 @@ public class ArtistaServiceImpl implements ArtistaService {
             List<ArtistaModel> artistaPorNome = artistaRepository.findAllByNome(nome);
 
             if (artistaPorNome.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontramos nenhum artista com o nome " + nome + ". Informe um nome válido.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontramos nenhum artista com o nome " + nome + ".");
             } else {
                 return ResponseEntity.status(HttpStatus.OK).body(artistaPorNome);
             }

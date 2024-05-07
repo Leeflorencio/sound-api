@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -42,5 +44,10 @@ public class MusicaModel {
     @JoinColumn(name = "album_id")
     @JsonBackReference
     private AlbumModel album;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonManagedReference
+    @ManyToMany(mappedBy = "listaDeMusicas")
+    private List<PlaylistModel> playlists;
 
 }
