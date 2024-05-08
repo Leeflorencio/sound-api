@@ -29,6 +29,9 @@
 - PUT /musicas/atualizar/{id}: Atualiza um registro existente de um álbum pelo ID.
 - DELETE /musicas/deletar/{id}: Exclui um registro existente de um álbum pelo ID.
 
+### Playlist
+- POST /playlist/cadastrar: Cria uma nova playlist no banco de dados.
+
 ### 🛠 Tecnologias
 Java 17 - MySQL - Spring Data JPA - Hibernate - Spring Boot - API Docs 
 
