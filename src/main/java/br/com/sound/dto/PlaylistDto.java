@@ -11,12 +11,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class PlaylistDto {
 
-    private Long id;
     private String nome;
     private String descricao;
-    private LocalDate dataCriacao;
-    private LocalDate ultimaAtualizacao;
-    private Integer totalDeMusicas;
     //privacidade -> publica ou privada
     //criador -> usuario criador da playlist
 }

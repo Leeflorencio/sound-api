@@ -45,4 +45,8 @@ public class PlaylistModel {
     @JsonManagedReference
     private List<MusicaModel> listaDeMusicas;
 
+    public void setTotalDeMusicas(List<MusicaModel> listaDeMusicas){
+        this.listaDeMusicas = listaDeMusicas;
+        this.totalDeMusicas = listaDeMusicas.size();
+    }
 }

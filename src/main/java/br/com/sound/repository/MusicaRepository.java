@@ -32,4 +32,5 @@ public interface MusicaRepository extends JpaRepository<MusicaModel, Long> {
             "JOIN musicas AS m ON a.id = m.album_id " +
             "WHERE a.id = :idAlbum", nativeQuery = true)
     List<String> findAlbumAndMusicDetailsByAlbumId(@Param("idAlbum") Long idAlbum);
+
 }
