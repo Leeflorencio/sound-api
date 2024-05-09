@@ -9,9 +9,12 @@ import br.com.sound.service.PlaylistService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -94,5 +97,21 @@ public class PlaylistServiceImpl implements PlaylistService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro : " + e);
         }
     }
+
+    @Override
+    public ResponseEntity<?> listarPlaylists(Pageable pageable) {
+        try{
+            Page<PlaylistModel> lista = playlistRepository.findAll(pageable);
+
+            if (lista.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não há playlist cadastrada");
+            }else {
+                return ResponseEntity.status(HttpStatus.OK).body(lista);
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar playlists: " + e);
+        }
+    }
+
 
 }

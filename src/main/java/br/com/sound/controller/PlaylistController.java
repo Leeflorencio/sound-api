@@ -3,6 +3,9 @@ package br.com.sound.controller;
 import br.com.sound.dto.PlaylistDto;
 import br.com.sound.service.PlaylistService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +26,16 @@ public class PlaylistController {
         return playlistService.adicionarMusicas(idMusica, idPlaylist);
     }
 
-    @GetMapping("/listar-musicas-playlist")
+    @GetMapping("/listar-por-id")
     public ResponseEntity<?> verificarMusicasCadastradas(@RequestParam Long idPlaylist){
         return playlistService.ListarMusicasDaPlaylist(idPlaylist);
     }
+
+    @GetMapping("/listar")
+    public ResponseEntity<?> listar(@RequestParam Integer paginas, Integer registros){
+        Pageable pageable = PageRequest.of(paginas - 1, registros);
+        return playlistService.listarPlaylists(pageable);
+    }
+
+
 }
