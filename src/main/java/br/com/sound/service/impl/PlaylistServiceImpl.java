@@ -14,10 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +38,7 @@ public class PlaylistServiceImpl implements PlaylistService {
             playlist.setUltimaAtualizacao(LocalDate.now());
             playlistRepository.save(playlist);
             return ResponseEntity.status(HttpStatus.CREATED).body("Playlist criada com sucesso");
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar a playlist: " + e);
         }
     }
@@ -77,7 +75,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public ResponseEntity<?> ListarMusicasDaPlaylist(Long idPlaylist) {
+    public ResponseEntity<?> listarMusicasDaPlaylist(Long idPlaylist) {
         try {
             Optional<PlaylistModel> playlistOptional = playlistRepository.findById(idPlaylist);
             if (!playlistOptional.isPresent()) {
@@ -100,18 +98,43 @@ public class PlaylistServiceImpl implements PlaylistService {
 
     @Override
     public ResponseEntity<?> listarPlaylists(Pageable pageable) {
-        try{
+        try {
             Page<PlaylistModel> lista = playlistRepository.findAll(pageable);
 
-            if (lista.isEmpty()){
+            if (lista.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não há playlist cadastrada");
-            }else {
+            } else {
                 return ResponseEntity.status(HttpStatus.OK).body(lista);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar playlists: " + e);
         }
     }
+
+    @Override
+    public ResponseEntity<Object> atualizarPlaylist(Long id, PlaylistDto playlistDto) {
+        try {
+            Optional<PlaylistModel> playlistOptional = playlistRepository.findById(id);
+
+            if (!playlistOptional.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe playlist com o id: " + id);
+            } else {
+                PlaylistModel playlist = playlistOptional.get();
+
+                playlist.setNome(playlistDto.getNome());
+                playlist.setDescricao(playlistDto.getDescricao());
+                playlist.setUltimaAtualizacao(LocalDate.now());
+
+                playlistRepository.save(playlist);
+
+                return ResponseEntity.status(HttpStatus.OK).body("Playlist atualizada com sucesso.");
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 
 }

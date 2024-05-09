@@ -28,7 +28,7 @@ public class PlaylistController {
 
     @GetMapping("/listar-por-id")
     public ResponseEntity<?> verificarMusicasCadastradas(@RequestParam Long idPlaylist){
-        return playlistService.ListarMusicasDaPlaylist(idPlaylist);
+        return playlistService.listarMusicasDaPlaylist(idPlaylist);
     }
 
     @GetMapping("/listar")
@@ -37,5 +37,8 @@ public class PlaylistController {
         return playlistService.listarPlaylists(pageable);
     }
 
-
+    @PutMapping("/atualizar")
+    public ResponseEntity<Object> atualizar(@RequestParam Long id, @RequestBody PlaylistDto playlistDto){
+        return playlistService.atualizarPlaylist(id, playlistDto);
+    }
 }

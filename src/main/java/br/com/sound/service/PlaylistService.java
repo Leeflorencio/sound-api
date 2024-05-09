@@ -11,7 +11,9 @@ public interface PlaylistService {
 
     ResponseEntity<Object> adicionarMusicas(Long idMusica, Long idPlaylist);
 
-    ResponseEntity<?> ListarMusicasDaPlaylist(Long idPlaylist);
+    ResponseEntity<?> listarMusicasDaPlaylist(Long idPlaylist);
 
     ResponseEntity<?> listarPlaylists(Pageable pageable);
+
+    ResponseEntity<Object> atualizarPlaylist(Long id, PlaylistDto playlistDto);
 }
