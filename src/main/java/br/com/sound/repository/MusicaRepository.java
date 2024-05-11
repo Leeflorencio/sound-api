@@ -1,6 +1,7 @@
 package br.com.sound.repository;
 
 import br.com.sound.model.MusicaModel;
+import br.com.sound.model.PlaylistModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -32,5 +33,8 @@ public interface MusicaRepository extends JpaRepository<MusicaModel, Long> {
             "JOIN musicas AS m ON a.id = m.album_id " +
             "WHERE a.id = :idAlbum", nativeQuery = true)
     List<String> findAlbumAndMusicDetailsByAlbumId(@Param("idAlbum") Long idAlbum);
+
+    @Query("SELECT COUNT(m) > 0 FROM MusicaModel m JOIN m.playlists playlist WHERE m = :musica AND playlist = :playlist")
+    boolean existsMusicaIntoPlaylist(MusicaModel musica, PlaylistModel playlist);
 
 }

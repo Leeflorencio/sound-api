@@ -135,6 +135,40 @@ public class PlaylistServiceImpl implements PlaylistService {
         }
     }
 
+    @Override
+    public ResponseEntity<Object> excluirMusica(Long idPlaylist, Long idMusica) {
+        try {
+            Optional<PlaylistModel> playlistOptional = playlistRepository.findById(idPlaylist);
+            Optional<MusicaModel> musicaOptional = musicaRepository.findById(idMusica);
 
+            if (!playlistOptional.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Playlist não encontrada");
+            } else if (!musicaOptional.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Música não encontrada");
+            } else {
+                PlaylistModel playlist = playlistOptional.get();
+                MusicaModel musica = musicaOptional.get();
+                List<MusicaModel> musicasNaPlaylist = playlist.getListaDeMusicas();
 
+                if (musicasNaPlaylist.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("A Playlist está vazia");
+                } else {
+                    boolean existeMusica = musicaRepository.existsMusicaIntoPlaylist(musica, playlist);
+
+                    if (existeMusica) {
+                        playlist.getListaDeMusicas().remove(musica);
+                        playlist.setTotalDeMusicas(playlist.getListaDeMusicas());
+                        playlist.setUltimaAtualizacao(LocalDate.now());
+                        playlistRepository.save(playlist);
+
+                        return ResponseEntity.status(HttpStatus.OK).body("Música excluída com sucesso");
+                    } else {
+                        return ResponseEntity.status(HttpStatus.OK).body("A música não foi localizada na playlist");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro na exclução da música: " + e);
+        }
+    }
 }

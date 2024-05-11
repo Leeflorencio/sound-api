@@ -16,4 +16,6 @@ public interface PlaylistService {
     ResponseEntity<?> listarPlaylists(Pageable pageable);
 
     ResponseEntity<Object> atualizarPlaylist(Long id, PlaylistDto playlistDto);
+
+    ResponseEntity<Object> excluirMusica(Long idPlaylist, Long idMusica);
 }

@@ -41,4 +41,9 @@ public class PlaylistController {
     public ResponseEntity<Object> atualizar(@RequestParam Long id, @RequestBody PlaylistDto playlistDto){
         return playlistService.atualizarPlaylist(id, playlistDto);
     }
+
+    @DeleteMapping("/deletar-musica")
+    public ResponseEntity<Object> deletarMusica(@RequestParam Long idPlaylist, Long idMusica){
+        return playlistService.excluirMusica(idPlaylist, idMusica);
+    }
 }
