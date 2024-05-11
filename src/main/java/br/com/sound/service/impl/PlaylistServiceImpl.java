@@ -171,4 +171,30 @@ public class PlaylistServiceImpl implements PlaylistService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro na exclução da música: " + e);
         }
     }
+
+    @Override
+    public ResponseEntity<Object> deletarPlaylist(Long id) {
+        try {
+            Optional<PlaylistModel> playlistOptional = playlistRepository.findById(id);
+
+            if (!playlistOptional.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Playlist não localizada");
+            } else {
+                PlaylistModel playlist = playlistOptional.get();
+                List<MusicaModel> musicasNaPlaylist = playlist.getListaDeMusicas();
+
+                if (!musicasNaPlaylist.isEmpty()) {
+                    musicaRepository.deleteAll(musicasNaPlaylist);
+                    playlist.getListaDeMusicas().clear();
+                    log.info("deletando todas as musicas da playlist");
+                }
+                playlistRepository.delete(playlist);
+                return ResponseEntity.status(HttpStatus.OK).body("Playlist excluída com sucesso");
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro na exclusão: " + e);
+        }
+    }
+
 }

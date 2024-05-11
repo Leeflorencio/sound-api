@@ -18,4 +18,6 @@ public interface PlaylistService {
     ResponseEntity<Object> atualizarPlaylist(Long id, PlaylistDto playlistDto);
 
     ResponseEntity<Object> excluirMusica(Long idPlaylist, Long idMusica);
+
+    ResponseEntity<Object> deletarPlaylist(Long id);
 }

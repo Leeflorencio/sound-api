@@ -46,4 +46,9 @@ public class PlaylistController {
     public ResponseEntity<Object> deletarMusica(@RequestParam Long idPlaylist, Long idMusica){
         return playlistService.excluirMusica(idPlaylist, idMusica);
     }
+
+    @DeleteMapping("/deletar")
+    public ResponseEntity<Object> excluirPlaylist(@RequestParam Long id){
+        return playlistService.deletarPlaylist(id);
+    }
 }
