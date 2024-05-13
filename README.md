@@ -15,7 +15,7 @@
 - DELETE /artistas/deletar/{id}: Exclui um registro existente de um artista pelo ID.
 
 ### Música 
-- GET /musicas/listarTodos: Solicita a quantidade de registros através de paginação, e retorna todos os músicas cadastrados.
+- GET /musicas/listar: Solicita a quantidade de registros através de paginação, e retorna todos os músicas cadastrados.
 - GET /musicas/buscarPorId/{id}: Solicita o identificador da música, e retorna um registro específico da entidade pelo ID.
 - GET /musicas/buscarPorNome: Solicita o nome da música, e retorna um registro específico da entidade pelo nome.
 - POST /musicas/cadastro: Cria uma nova música no banco de dados.
@@ -30,7 +30,11 @@
 - DELETE /musicas/deletar/{id}: Exclui um registro existente de um álbum pelo ID.
 
 ### Playlist
+- GET /playlist/listar: Solicita a quantidade de registros através de paginação, e retorna todas as playlists cadastradas.
+- GET /playlist/buscarPorId/{id}: Solicita o identificador da playlist, e retorna um registro específico com todas as músicas da playlist.
 - POST /playlist/cadastrar: Cria uma nova playlist no banco de dados.
+- PUT /playlist/atualizar/{id}: Atualiza um registro existente de uma pelo ID.
+- DELETE /playlist/deletar/{id}: Exclui um registro existente de uma playlist pelo ID.
 
 ### 🛠 Tecnologias
 Java 17 - MySQL - Spring Data JPA - Hibernate - Spring Boot - API Docs 
