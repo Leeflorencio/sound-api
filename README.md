@@ -37,7 +37,7 @@
 - DELETE /playlist/deletar/{id}: Exclui um registro existente de uma playlist pelo ID.
 
 ### 🛠 Tecnologias
-Java 17 - MySQL - Spring Data JPA - Hibernate - Spring Boot - API Docs 
+Java 17 - MySQL - Spring Data JPA - Hibernate - Spring Boot - API Docs - Service Registry Eureka
 
 ### Pré-requisitos e Testes
 Utilizei a API Docs para documentação e testes -> http://localhost:8080/swagger-ui/index.html#/
